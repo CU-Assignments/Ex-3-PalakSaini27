@@ -1,0 +1,57 @@
+import java.util.Scanner;
+
+public class Main {
+    private static final String CORRECT_PIN = "2004"; // Example PIN
+    private static double balance = 500000.0; // Initial balance in the account
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Ask for user PIN
+        System.out.print("Enter your PIN: ");
+        String enteredPin = scanner.nextLine();
+        
+        try {
+            // Validate the PIN
+            if (!enteredPin.equals(CORRECT_PIN)) {
+                throw new InvalidPinException("Incorrect PIN. Please try again.");
+            }
+            
+            // Ask for withdrawal amount
+            System.out.print("Enter withdrawal amount: ");
+            double withdrawalAmount = scanner.nextDouble();
+            
+            // Check if the balance is sufficient
+            if (withdrawalAmount > balance) {
+                throw new InsufficientBalanceException("Insufficient balance for the withdrawal.");
+            }
+            
+            // Process the withdrawal
+            balance -= withdrawalAmount;
+            System.out.println("Withdrawal successful! You withdrew: " + withdrawalAmount);
+            
+        } catch (InvalidPinException | InsufficientBalanceException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e.getMessage());
+        } finally {
+            // Always show the remaining balance
+            System.out.println("Remaining balance: " + balance);
+            scanner.close(); // Close the scanner
+        }
+    }
+}
+
+// Custom Exception for Invalid PIN
+class InvalidPinException extends Exception {
+    public InvalidPinException(String message) {
+        super(message);
+    }
+}
+
+// Custom Exception for Insufficient Balance
+class InsufficientBalanceException extends Exception {
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
